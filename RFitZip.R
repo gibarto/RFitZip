@@ -4,7 +4,7 @@
 openConnection <- function(app, my_key, my_secret) {
   require(httr)
   require(httpuv)
-  require(jsonlite)
+  require(rjson)
 
   token_url = "https://api.fitbit.com/oauth/request_token"
   access_url = "https://api.fitbit.com/oauth/access_token"
@@ -35,7 +35,11 @@ getSteps <- function(start_date, end_date) {
   steps_url=paste("https://api.fitbit.com/1/user/-/activities/steps/date/", start_date, "/", end_date, ".json", sep="")
   steps=GET(steps_url, sig)
   steps<-iconv(steps[6])
-  steps<-fromJSON(steps, simplifyDataFrame=TRUE)
+  steps<-fromJSON(steps)
+  steps<-steps$activities
+  steps<-do.call(rbind, lapply(steps, data.frame, stringsAsFactors=FALSE))
+  steps$dateTime<-as.Date(steps$dateTime)
+  steps$value<-as.numeric(steps$value)
   steps
 }
 

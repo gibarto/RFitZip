@@ -9,11 +9,11 @@ The FitBit API allows developer access to data without signing up for premium me
 
 https://dev.fitbit.com/apps/new
 
-You will need to assure that the httr, httpuv, and jsonlite packages are installed, then source the R code.
+You will need to assure that the httr, httpuv, and rjson packages are installed, then source the R code.
 
 Now you can use the functions:
 
-openConnection(app, my_key, my_secret) (all arguments should be in quotes)
+openConnection(`app, my_key, my_secret`) (all arguments should be in quotes)
 Opens a connection to the FitBit data. You should map the result to sig*:
 
     > sig <- openConnection("your app name", "your key", "your secret")
@@ -32,14 +32,19 @@ Returns an atomic vector with the user's display name, date of birth, height and
     > 
 
 
-getSteps(start_date, end_date) (dates to be given as "yyyy-mm-dd" in quotes)
+getSteps(`start_date, end_date`) (dates to be given as "yyyy-mm-dd" in quotes)
+Returns a data frame with dateTime as a date object and value as a numeric
 
-    > steps<-getSteps("2014-12-31", "2015-01-02")
+ 
+    > steps<-getSteps("2015-01-01", "2015-01-05")
     > steps
-    $`activities-steps`
         dateTime value
-    1 2014-12-31  6129
-    2 2015-01-01  5108
-    3 2015-01-02  9244
+    1 2015-01-01  5108
+    2 2015-01-02  9244
+    3 2015-01-03  3681
+    4 2015-01-04  6365
+    5 2015-01-05  6371
+    > 
+
 
 *The backbone of the oauth code was found at http://sidderb.wordpress.com/2013/09/09/accessing-fitbit-data-in-r/ before being updated and turned into a function.
