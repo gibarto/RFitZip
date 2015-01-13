@@ -24,7 +24,7 @@ getUser <- function() {
   user_url<-"https://api.fitbit.com/1/user/-/profile.json"
   user=GET(user_url, sig)
   user<-iconv(user[6])
-  user<-fromJSON(user, flatten=TRUE)
+  user<-fromJSON(user)
   profile<-c(user$user$displayName, user$user$dateOfBirth, user$user$height, user$user$weight)
   names(profile)<-c("name", "birthdate", "height", "weight")
   profile
@@ -33,7 +33,7 @@ getUser <- function() {
 ## get steps from a date range - dates formatted 'yyyy-mm-dd'
 getSteps <- function(start_date, end_date) {
   steps_url=paste("https://api.fitbit.com/1/user/-/activities/steps/date/", start_date, "/", end_date, ".json", sep="")
-  steps=GET(steps_url, sig)
+  steps<-GET(steps_url, sig)
   steps<-iconv(steps[6])
   steps<-fromJSON(steps)
   steps<-steps$activities
@@ -43,4 +43,25 @@ getSteps <- function(start_date, end_date) {
   steps
 }
 
+## get calories for the day - dates formatted 'yyyy-mm-dd'
+getCalories <- function(start_date, end_date) {
+  calories_url<-paste("https://api.fitbit.com/1/user/-/activities/calories/date/", start_date, "/", end_date, ".json", sep="")
+  calories<-GET(calories_url, sig)
+  calories<-iconv(calories[6])
+  calories<-fromJSON(calories)
+  calories<-calories$`activities-calories`
+  calories<-do.call(rbind, lapply(calories, data.frame, stringsAsFactors=FALSE))
+  calories$dateTime<-as.Date(steps$dateTime)
+  calories$value<-as.numeric(calories$value)
+  calories
+}
+
+## get activity data for a given date in format 'yyyy-mm-dd'
+getActivities <- function(date) {
+  activities_url<-paste("https://api.fitbit.com/1/user/-/activities/date/", date, ".json", sep="")
+  activities<-GET(activities_url, sig)
+  activities<-iconv(activities[6])
+  activities<-fromJSON(activities)
+  activities
+}
 

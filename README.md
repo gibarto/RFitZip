@@ -14,12 +14,14 @@ You will need to assure that the httr, httpuv, and rjson packages are installed,
 Now you can use the functions:
 
 openConnection(`app, my_key, my_secret`) (all arguments should be in quotes)
+
 Opens a connection to the FitBit data. You should map the result to sig*:
 
     > sig <- openConnection("your app name", "your key", "your secret")
     >
 
 getUser()
+
 Returns an atomic vector with the user's display name, date of birth, height and weight:
 
     > getUser()
@@ -33,8 +35,8 @@ Returns an atomic vector with the user's display name, date of birth, height and
 
 
 getSteps(`start_date, end_date`) (dates to be given as "yyyy-mm-dd" in quotes)
-Returns a data frame with dateTime as a date object and value as a numeric
 
+Returns a data frame with dateTime as a date object and value equal to steps
  
     > steps<-getSteps("2015-01-01", "2015-01-05")
     > steps
@@ -46,5 +48,20 @@ Returns a data frame with dateTime as a date object and value as a numeric
     5 2015-01-05  6371
     > 
 
+getCalories(`start_date, end_date`) (dates to be given as "yyyy-mm-dd" in quotes)
+
+Returns a data frame with dateTime as a date object and value equal to calories
+
+    > calories<-getCalories("2015-01-01", "2015-01-05")
+    > calories
+         dateTime value
+    1  2015-01-01  2087
+    2  2015-01-02  2407
+    3  2015-01-03  2013
+    4  2015-01-04  2153
+    5  2015-01-05  2182
+    > 
+
+More functions to come!
 
 *The backbone of the oauth code was found at http://sidderb.wordpress.com/2013/09/09/accessing-fitbit-data-in-r/ before being updated and turned into a function.
