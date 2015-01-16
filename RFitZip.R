@@ -56,12 +56,17 @@ getCalories <- function(start_date, end_date) {
   calories
 }
 
-## get activity data for a given date in format 'yyyy-mm-dd'
-getActivities <- function(date) {
-  activities_url<-paste("https://api.fitbit.com/1/user/-/activities/date/", date, ".json", sep="")
-  activities<-GET(activities_url, sig)
-  activities<-iconv(activities[6])
-  activities<-fromJSON(activities)
-  activities
+## get foods for a given date in format 'yyyy-mm-dd'
+getCaloriesIn <-function(start_date, end_date) {
+  calsIn_url<-paste("https://api.fitbit.com/1/user/-/foods/log/caloriesIn/date/", start_date,"/",end_date,".json", sep="")
+  calsIn<-GET(calsIn_url,sig)
+  calsIn<-iconv(calsIn[6])
+  calsIn<-fromJSON(calsIn)
+  calsIn<-calsIn$`foods-log-caloriesIn`
+  calsIn<-do.call(rbind, lapply(calsIn, data.frame, stringsAsFactors=FALSE))
+  calsIn$dateTime<-as.Date(calsIn$dateTime)
+  calsIn$value<-as.numeric(calsIn$value)
+  calsIn
 }
+
 

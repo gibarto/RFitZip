@@ -50,7 +50,7 @@ Returns a data frame with dateTime as a date object and value equal to steps
 
 getCalories(`start_date, end_date`) (dates to be given as "yyyy-mm-dd" in quotes)
 
-Returns a data frame with dateTime as a date object and value equal to calories
+Returns a data frame with dateTime as a date object and value equal to calories burned
 
     > calories<-getCalories("2015-01-01", "2015-01-05")
     > calories
@@ -62,6 +62,20 @@ Returns a data frame with dateTime as a date object and value equal to calories
     5  2015-01-05  2182
     > 
 
+getCaloriesIn(`start_date, end_date`) (dates to be given as "yyyy-mm-dd" in quotes)
+
+Returns a data frame with dateTime as a date object and value equal to calories consumed
+
+    > calsIn<-getCaloriesIn("2015-01-01", "2015-01-05")
+    > calsIn
+        dateTime value
+    1 2015-01-01  1645
+    2 2015-01-02  2703
+    3 2015-01-03  1920
+    4 2015-01-04  2780
+    5 2015-01-05  1898
+    > 
+
 More functions to come!
 
-*The backbone of the oauth code was found at http://sidderb.wordpress.com/2013/09/09/accessing-fitbit-data-in-r/ before being updated and turned into a function.
+*The backbone of the oauth code was found at http://sidderb.wordpress.com/2013/09/09/accessing-fitbit-data-in-r/ before being updated and turned into a function. Make sure to map to sig, because the other functions need the oauth generated to access the API.
