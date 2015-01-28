@@ -76,6 +76,16 @@ Returns a data frame with dateTime as a date object and value equal to calories 
     5 2015-01-05  1898
     > 
 
+getSurplusCals(`start-date, end-date`) (dates to be given as "yyyy-mm-dd" in quotes)
+
+Returns an atomic vector with the total and average number of calories consumed minus those burned. A negative number indicates more calories burned than eaten.
+
+    > surplus<-getSurplusCals("2015-01-01", "2015-01-05")
+    > surplus
+      total average 
+      104.0    20.8 
+    > 
+
 More functions to come!
 
 *The backbone of the oauth code was found at http://sidderb.wordpress.com/2013/09/09/accessing-fitbit-data-in-r/ before being updated and turned into a function. Make sure to map to sig, because the other functions need the oauth generated to access the API.

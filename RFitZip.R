@@ -30,7 +30,7 @@ getUser <- function() {
   profile
 }
 
-## get steps from a date range - dates formatted 'yyyy-mm-dd'
+## get steps for a date range - dates formatted 'yyyy-mm-dd'
 getSteps <- function(start_date, end_date) {
   steps_url=paste("https://api.fitbit.com/1/user/-/activities/steps/date/", start_date, "/", end_date, ".json", sep="")
   steps<-GET(steps_url, sig)
@@ -43,7 +43,7 @@ getSteps <- function(start_date, end_date) {
   steps
 }
 
-## get calories for the day - dates formatted 'yyyy-mm-dd'
+## get calories for a date range - dates formatted 'yyyy-mm-dd'
 getCalories <- function(start_date, end_date) {
   calories_url<-paste("https://api.fitbit.com/1/user/-/activities/calories/date/", start_date, "/", end_date, ".json", sep="")
   calories<-GET(calories_url, sig)
@@ -51,12 +51,12 @@ getCalories <- function(start_date, end_date) {
   calories<-fromJSON(calories)
   calories<-calories$`activities-calories`
   calories<-do.call(rbind, lapply(calories, data.frame, stringsAsFactors=FALSE))
-  calories$dateTime<-as.Date(steps$dateTime)
+  calories$dateTime<-as.Date(calories$dateTime)
   calories$value<-as.numeric(calories$value)
   calories
 }
 
-## get foods for a given date in format 'yyyy-mm-dd'
+## get calories consumed for a date range - dates formatted 'yyyy-mm-dd'
 getCaloriesIn <-function(start_date, end_date) {
   calsIn_url<-paste("https://api.fitbit.com/1/user/-/foods/log/caloriesIn/date/", start_date,"/",end_date,".json", sep="")
   calsIn<-GET(calsIn_url,sig)
@@ -69,4 +69,13 @@ getCaloriesIn <-function(start_date, end_date) {
   calsIn
 }
 
-
+## get surplus calories for a date range - dates formatted 'yyyy-mm-dd'
+getSurplusCals <- function(start_date, end_date) {
+  calories<-getCalories(start_date, end_date)
+  calsIn<-getCaloriesIn(start_date, end_date)
+  total<-sum(calsIn$value)-sum(calories$value)
+  average<-mean(calsIn$value-mean(calories$value))
+  surplus<-c(total, average)
+  names(surplus)<-c("total", "average")
+  surplus
+}
